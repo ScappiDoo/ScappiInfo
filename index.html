@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScappiDoo — Paper plugin developer</title>
+<meta name="description" content="Small, focused Paper server plugins — chat tooling, moderation utilities, and dev tooling. Portfolio of ScappiDoo, Minecraft plugin developer.">
+<meta property="og:title" content="ScappiDoo — Paper plugin developer">
+<meta property="og:description" content="Small, focused Paper server plugins — chat tooling, moderation utilities, and dev tooling.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://scappidoo.github.io">
+<meta name="theme-color" content="#F7F8FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C111B" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --ink: #101828;
+  --muted: #5B6472;
+  --line: #E3E7EE;
+  --accent: #1E3A8A;
+  --accent-soft: rgba(30, 58, 138, 0.07);
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -12px rgba(30, 58, 138, 0.12);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0C111B;
+    --surface: #121927;
+    --ink: #E6EAF2;
+    --muted: #98A2B3;
+    --line: #222C3E;
+    --accent: #8FB0FF;
+    --accent-soft: rgba(143, 176, 255, 0.08);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--bg); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header ---------- */
+header {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  font-family: var(--font-mono); font-size: 0.9375rem; font-weight: 500;
+  text-decoration: none; letter-spacing: -0.01em;
+}
+.brand .tilde { color: var(--accent); }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: 0.9375rem; text-decoration: none; color: var(--muted);
+  transition: color 160ms ease;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-gh {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--ink) !important; font-weight: 500;
+}
+.nav-gh svg { width: 18px; height: 18px; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; padding: 104px 0 96px; overflow: hidden; }
+.hero-grid {
+  display: grid; grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px; align-items: center;
+}
+.kicker {
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500;
+  color: var(--accent); letter-spacing: 0.02em;
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 22px;
+}
+.kicker::before {
+  content: ""; width: 24px; height: 1px; background: var(--accent);
+}
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.2vw, 3.75rem);
+  font-weight: 700; line-height: 1.06; letter-spacing: -0.025em;
+  margin-bottom: 24px;
+  text-wrap: balance;
+}
+h1 em { font-style: normal; color: var(--accent); }
+.hero p.lede {
+  color: var(--muted); max-width: 46ch; margin-bottom: 36px;
+  font-size: 1.125rem;
+}
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-display); font-size: 0.9375rem; font-weight: 600;
+  text-decoration: none; padding: 12px 22px; border-radius: 8px;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+.btn svg { width: 17px; height: 17px; }
+button.btn { border: 0; cursor: pointer; font: inherit; font-family: var(--font-display); font-size: 0.9375rem; font-weight: 600; }
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-ghost { border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+.btn-ghost:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+/* plugin.yml card */
+.yml-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--shadow);
+  font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.75;
+  overflow: hidden;
+}
+.yml-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 18px; border-bottom: 1px solid var(--line);
+  color: var(--muted); font-size: 0.78rem;
+}
+.yml-head .dots { display: flex; gap: 6px; margin-right: 6px; }
+.yml-head .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.yml-body { padding: 20px 22px; }
+.yml-body .k { color: var(--accent); }
+.yml-body .c { color: var(--muted); }
+
+/* voxel dust decoration */
+.voxels { position: absolute; right: -40px; top: 30px; opacity: 0.5; pointer-events: none; }
+.voxels rect { fill: var(--accent); }
+
+/* ---------- sections ---------- */
+section { padding: 88px 0; }
+.section-label {
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500;
+  color: var(--accent); margin-bottom: 14px;
+}
+h2 {
+  font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px;
+}
+.section-intro { color: var(--muted); max-width: 56ch; margin-bottom: 48px; }
+
+/* plugin cards */
+.plugin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.plugin-card {
+  display: flex; flex-direction: column; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 26px;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.plugin-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
+.plugin-top { display: flex; align-items: center; justify-content: space-between; }
+.plugin-icon {
+  width: 42px; height: 42px; border-radius: 9px;
+  background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+.plugin-icon svg { width: 21px; height: 21px; }
+.plugin-arrow { color: var(--muted); transition: transform 180ms ease, color 180ms ease; }
+.plugin-arrow svg { width: 18px; height: 18px; }
+.plugin-card:hover .plugin-arrow { transform: translate(3px, -3px); color: var(--accent); }
+.plugin-name { font-family: var(--font-mono); font-size: 1.0625rem; font-weight: 500; }
+.plugin-desc { color: var(--muted); font-size: 0.9375rem; line-height: 1.6; flex-grow: 1; }
+.tag {
+  align-self: flex-start;
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 4px 11px; border-radius: 99px;
+}
+
+/* contact */
+.contact { text-align: center; padding: 112px 0; }
+.contact .section-label { justify-content: center; }
+.contact p { color: var(--muted); max-width: 44ch; margin: 0 auto 36px; }
+.contact-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 28px 0;
+}
+.foot {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.875rem; color: var(--muted); flex-wrap: wrap; gap: 12px;
+}
+.foot .mono { font-family: var(--font-mono); font-size: 0.8125rem; }
+
+/* ---------- motion ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 560ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.d1 { animation-delay: 60ms; } .d2 { animation-delay: 140ms; }
+.d3 { animation-delay: 220ms; } .d4 { animation-delay: 320ms; }
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; }
+  .plugin-card, .btn, .plugin-arrow { transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 800px) {
+  body { font-size: 1rem; }
+  .nav-links li.hide-m { display: none; }
+  .hero { padding: 64px 0 64px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+  .hero p.lede { font-size: 1.0625rem; }
+  .voxels { display: none; }
+  section { padding: 64px 0; }
+  .plugin-grid { grid-template-columns: 1fr; gap: 14px; }
+  .plugin-card { padding: 22px; }
+  .contact { padding: 80px 0; }
+  .btn { padding: 13px 20px; width: 100%; justify-content: center; }
+  .hero-cta, .contact-cta { flex-direction: column; }
+  .yml-card { font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#"><span class="tilde">~/</span>ScappiDoo</a>
+    <ul class="nav-links">
+      <li class="hide-m"><a href="#plugins">Plugins</a></li>
+      <li class="hide-m"><a href="#contact">Contact</a></li>
+      <li><a class="nav-gh" href="https://github.com/ScappiDoo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-label="Introduction">
+    <svg class="voxels" width="360" height="360" viewBox="0 0 360 360" aria-hidden="true">
+      <rect x="300" y="20" width="10" height="10" opacity="0.5"/>
+      <rect x="330" y="60" width="14" height="14" opacity="0.3"/>
+      <rect x="280" y="90" width="8" height="8" opacity="0.6"/>
+      <rect x="320" y="140" width="10" height="10" opacity="0.25"/>
+      <rect x="345" y="110" width="6" height="6" opacity="0.5"/>
+      <rect x="290" y="190" width="12" height="12" opacity="0.2"/>
+      <rect x="335" y="230" width="8" height="8" opacity="0.4"/>
+      <rect x="305" y="280" width="10" height="10" opacity="0.25"/>
+    </svg>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker rise">plugin maker · minecraft dev</p>
+        <h1 class="rise d1">Small, focused plugins for <em>Paper</em> servers.</h1>
+        <p class="lede rise d2">Chat tooling, moderation utilities, and dev tooling on the side — built to do one job well and stay out of the way.</p>
+        <div class="hero-cta rise d3">
+          <a class="btn btn-primary" href="#plugins">
+            Browse plugins
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/ScappiDoo" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            github.com/ScappiDoo
+          </a>
+        </div>
+      </div>
+      <div class="rise d4">
+        <div class="yml-card" role="img" aria-label="Stylized plugin.yml file describing ScappiDoo">
+          <div class="yml-head">
+            <span class="dots"><i></i><i></i><i></i></span>
+            plugin.yml
+          </div>
+          <div class="yml-body">
+            <span class="k">name:</span> ScappiDoo<br>
+            <span class="k">main:</span> dev.scappi.Portfolio<br>
+            <span class="k">api-version:</span> '1.21'<br>
+            <span class="k">description:</span> Plugin maker and minecraft dev.<br>
+            <span class="k">libraries:</span><br>
+            &nbsp;&nbsp;- java<br>
+            &nbsp;&nbsp;- python<br>
+            <span class="c"># does one thing. does it well.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plugins" aria-label="Plugins">
+    <div class="wrap">
+      <h2>Built &amp; shipped</h2>
+      <p class="section-intro">Open-source plugins for Paper Minecraft servers, plus tooling for plugin developers. Every repo below is public on GitHub.</p>
+      <div class="plugin-grid">
+
+        <a class="plugin-card" href="https://github.com/ScappiDoo/ChatPing" target="_blank" rel="noopener">
+          <div class="plugin-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg></span>
+            <span class="plugin-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+          </div>
+          <span class="plugin-name">ChatPing</span>
+          <span class="plugin-desc">Discord-style @mention pings for Paper Minecraft servers.</span>
+          <span class="tag">Java</span>
+        </a>
+
+        <a class="plugin-card" href="https://github.com/ScappiDoo/OptiCam" target="_blank" rel="noopener">
+          <div class="plugin-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 10 6-4v12l-6-4"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span>
+            <span class="plugin-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+          </div>
+          <span class="plugin-name">OptiCam</span>
+          <span class="plugin-desc">Realistic CCTV camera system for Paper Minecraft servers.</span>
+          <span class="tag">Java</span>
+        </a>
+
+        <a class="plugin-card" href="https://github.com/ScappiDoo/ScappiSupport" target="_blank" rel="noopener">
+          <div class="plugin-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m4.93 19.07 4.24-4.24"/></svg></span>
+            <span class="plugin-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+          </div>
+          <span class="plugin-name">ScappiSupport</span>
+          <span class="plugin-desc">In-game support tickets bridged to Discord threads.</span>
+          <span class="tag">Java</span>
+        </a>
+
+        <a class="plugin-card" href="https://github.com/ScappiDoo/TOSGuard" target="_blank" rel="noopener">
+          <div class="plugin-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="plugin-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+          </div>
+          <span class="plugin-name">TOSGuard</span>
+          <span class="plugin-desc">TOS/rules acceptance gate with GUI and version control.</span>
+          <span class="tag">Java</span>
+        </a>
+
+        <a class="plugin-card" href="https://github.com/ScappiDoo/MinecraftObfuscator" target="_blank" rel="noopener">
+          <div class="plugin-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/><path d="M9.9 9.9a3 3 0 1 0 4.24 4.24"/></svg></span>
+            <span class="plugin-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+          </div>
+          <span class="plugin-name">MinecraftObfuscator</span>
+          <span class="plugin-desc">Obfuscator for your own plugin JARs (Python GUI + Java/ASM engine).</span>
+          <span class="tag">Python</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-label="Contact">
+    <div class="wrap">
+      <h2>Get in touch</h2>
+      <p>Questions about a plugin, a bug report, or a server that needs something custom — add me on Discord: <strong>@tear.s</strong>. The button copies my username.</p>
+      <div class="contact-cta">
+        <button class="btn btn-primary" id="discord-btn" type="button" aria-label="Copy Discord username tear.s to clipboard">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.06a19.9 19.9 0 0 0 6.04 3.03 14.65 14.65 0 0 0 1.23-2.03 12.9 12.9 0 0 1-1.95-.93c.16-.12.32-.24.48-.36a14.2 14.2 0 0 0 12.18 0c.16.13.32.25.48.36-.62.37-1.28.68-1.95.93a14.61 14.61 0 0 0 1.23 2.03 19.84 19.84 0 0 0 6.03-3.04 20.23 20.23 0 0 0-3.56-13.68ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42s.95-2.42 2.16-2.42 2.18 1.09 2.16 2.42c0 1.34-.95 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42s.95-2.42 2.15-2.42 2.18 1.09 2.16 2.42c0 1.34-.95 2.42-2.16 2.42Z"/></svg>
+          <span id="discord-btn-label">Discord · @tear.s</span>
+        </button>
+        <a class="btn btn-ghost" href="https://github.com/ScappiDoo" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Open issues on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 ScappiDoo</span>
+    <span class="mono">built for Paper · Java &amp; Python</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var btn = document.getElementById('discord-btn');
+  var label = document.getElementById('discord-btn-label');
+  var timer;
+  btn.addEventListener('click', function () {
+    var show = function (text) {
+      label.textContent = text;
+      clearTimeout(timer);
+      timer = setTimeout(function () { label.textContent = 'Discord · @tear.s'; }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('tear.s').then(
+        function () { show('Copied @tear.s'); },
+        function () { show('Add @tear.s manually'); }
+      );
+    } else {
+      show('Add @tear.s manually');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
