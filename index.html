@@ -189,6 +189,25 @@ h2 {
   padding: 4px 11px; border-radius: 99px;
 }
 
+/* service cards */
+.service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; }
+.service-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 26px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.service-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
+.service-top { display: flex; align-items: center; justify-content: space-between; }
+.service-price {
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 5px 12px; border-radius: 99px; white-space: nowrap;
+}
+.service-name { font-family: var(--font-mono); font-size: 1.0625rem; font-weight: 500; }
+.service-desc { color: var(--muted); font-size: 0.9375rem; line-height: 1.6; flex-grow: 1; }
+.service-note { color: var(--muted); font-size: 0.875rem; margin-top: -28px; margin-bottom: 40px; }
+
 /* contact */
 .contact { text-align: center; padding: 112px 0; }
 .contact .section-label { justify-content: center; }
@@ -234,6 +253,9 @@ footer {
   .btn { padding: 13px 20px; width: 100%; justify-content: center; }
   .hero-cta, .contact-cta { flex-direction: column; }
   .yml-card { font-size: 0.8rem; }
+  .service-grid { grid-template-columns: 1fr; gap: 14px; }
+  .service-card { padding: 22px; }
+  .service-note { margin-top: -14px; }
 }
 </style>
 </head>
@@ -244,6 +266,7 @@ footer {
     <a class="brand" href="#"><span class="tilde">~/</span>ScappiDoo</a>
     <ul class="nav-links">
       <li class="hide-m"><a href="#plugins">Plugins</a></li>
+      <li class="hide-m"><a href="#services">Services</a></li>
       <li class="hide-m"><a href="#contact">Contact</a></li>
       <li><a class="nav-gh" href="https://github.com/ScappiDoo" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -418,6 +441,58 @@ footer {
           <span class="tag">Python</span>
         </a>
 
+      </div>
+    </div>
+  </section>
+
+  <section id="services" aria-label="Services">
+    <div class="wrap">
+      <h2>Hire me</h2>
+      <p class="section-intro">Commission work for your Paper server — from a quick script to a full custom plugin. Prices below are starting points; final quote depends on scope.</p>
+      <div class="service-grid">
+
+        <div class="service-card">
+          <div class="service-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></svg></span>
+            <span class="service-price">From $25</span>
+          </div>
+          <span class="service-name">Custom script</span>
+          <span class="service-desc">A focused script or command for one specific job — automation, a small tweak, a one-off tool.</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg></span>
+            <span class="service-price">From $60</span>
+          </div>
+          <span class="service-name">Plugin</span>
+          <span class="service-desc">A full custom Paper plugin built to spec — commands, GUIs, storage, the works.</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></span>
+            <span class="service-price">From $20</span>
+          </div>
+          <span class="service-name">Optimization</span>
+          <span class="service-desc">TPS drops, memory leaks, laggy plugins — I profile your server and fix what's slowing it down.</span>
+        </div>
+
+        <div class="service-card">
+          <div class="service-top">
+            <span class="plugin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg></span>
+            <span class="service-price">From $15</span>
+          </div>
+          <span class="service-name">Configuration</span>
+          <span class="service-desc">Plugin setup, permissions, and tuning for an existing server — get it working the way it should.</span>
+        </div>
+
+      </div>
+      <div class="hero-cta" style="margin-top: 32px;">
+        <a class="btn btn-primary" href="#contact">
+          Get a quote
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        </a>
       </div>
     </div>
   </section>
